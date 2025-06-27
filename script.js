@@ -12,32 +12,11 @@ async function init() {
   rightVideo.srcObject = stream;
 
   [leftCanvas, rightCanvas].forEach(c => {
-    c.width = window.innerWidth / 3;
-    c.height = window.innerHeight;
+    c.width = c.offsetWidth;
+    c.height = c.offsetHeight;
   });
 
-  await faceapi.nets.tinyFaceDetector.loadFromUri('/YOUR-REPO-NAME/models');
-
-  const detect = async () => {
-    const options = new faceapi.TinyFaceDetectorOptions();
-    const results = await faceapi.detectAllFaces(leftVideo, options);
-    const ctxL = leftCanvas.getContext('2d');
-    const ctxR = rightCanvas.getContext('2d');
-    ctxL.clearRect(0, 0, leftCanvas.width, leftCanvas.height);
-    ctxR.clearRect(0, 0, rightCanvas.width, rightCanvas.height);
-
-    results.forEach(({ box }) => {
-      [ctxL, ctxR].forEach(ctx => {
-        ctx.strokeStyle = "#00ff00";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(box.x, box.y, box.width, box.height);
-      });
-    });
-
-    requestAnimationFrame(detect);
-  };
-  detect();
-
+  // Audio visualization
   const audioCtx = new AudioContext();
   const source = audioCtx.createMediaStreamSource(stream);
   const analyser = audioCtx.createAnalyser();
@@ -53,9 +32,10 @@ async function init() {
   };
   updateAudio();
 
+  // Ticker update (static or optional feed)
   setInterval(() => {
     const now = new Date().toLocaleTimeString();
-    ticker.innerText = `📢 ${now} — All systems operational. No incidents reported.`;
+    ticker.innerText = `🟢 ${now} — LUX AURUM ACTIVE — All Systems Operational`;
   }, 10000);
 }
 
