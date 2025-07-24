@@ -1,2 +1,2 @@
-# Lux
-This
+# Neuromorphic Anomaly Detection
+
